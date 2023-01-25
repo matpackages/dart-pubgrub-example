@@ -1,0 +1,4 @@
+pub/
+.DS_Store
+.dart_tool/
+temp/

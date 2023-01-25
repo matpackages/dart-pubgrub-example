@@ -1,0 +1,10 @@
+name: dart_pubgrub_example
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
+dependencies:
+  pub:
+    path: ./pub
+  test: ^1.21.5
+  test_descriptor: ^2.0.0
+  test_process: ^2.0.0
