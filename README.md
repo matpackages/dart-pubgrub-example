@@ -1,40 +1,25 @@
+# dart-pubgrub-example
+
+Clone `pub` git repository:
+
+    git clone https://github.com/dart-lang/pub.git
+
 Install packages:
 
     dart pub get
 
-Run:
+Setup temp folder:
+
+    mkdir -p temp/myapp
+
+Start test case:
 
     dart run main.dart
 
-```
-git clone https://github.com/dart-lang/pub.git
+This command will:
+* start a package server that hosts the packages of the test case
+* create the file `temp/myapp/pubspec.yaml` describing the root dependencies
 
-mkdir -p temp/myapp
-mkdir -p temp/config
-mkdir -p temp/cache
+In a new Terminal, solve packages, use the port number (e.g. `50615`) from the previous output:
 
-WD=$(pwd)
-
-dart pub get
-
-dart run main.dart
-
-export CI=false
-export _PUB_TESTING=true
-export _PUB_TEST_CONFIG_DIR=$WD/temp/config
-export PUB_CACHE=$WD/temp/cache
-export PUB_ENVIRONMENT="test-environment"
-export _PUB_TEST_SDK_VERSION="3.1.2+3"
-export PUB_HOSTED_URL="http://localhost:50356"
-
-cd $WD/temp/myapp
-dart run --enable-asserts $WD/pub/bin/pub.dart get
-
-or 
-dart run $WD/pub/bin/pub.dart get
-
-# clean
-rm pubspec.lock
-rm -Rf ../cache/*
-rm -Rf ../config/*
-```
+    bash run_pub.sh 50615
