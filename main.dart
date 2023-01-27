@@ -6,12 +6,13 @@ import 'pub/test/test_pub.dart';
 void main() async {
     var project = 'temp/myapp';
     var file = 'test_case.json';
-    var jsonString = File(file).readAsStringSync();
-    var data = jsonDecode(jsonString);
-    var root = data['root'];
-    var packages = data['packages'];
+    var data = readTest(file);
+    await startPackageServer(project, data['root'], data['packages']);
+}
 
-    await startPackageServer(project, root, packages);
+dynamic readTest (file) {
+    var jsonString = File(file).readAsStringSync();
+    return jsonDecode(jsonString);
 }
 
 void startPackageServer(project, rootDeps, packages) async {
