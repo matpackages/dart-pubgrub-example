@@ -2,17 +2,12 @@ import 'pub/lib/src/solver.dart';
 import 'pub/lib/src/lock_file.dart';
 import 'pub/lib/src/system_cache.dart';
 import 'pub/lib/src/package.dart';
+import 'pub/lib/src/pubspec.dart';
 
 void main() async {
     var type = SolveType.get;
     var cache = SystemCache(isOffline: false);
-    var rootDir = '.';
-    var root = Package.load(
-        null,
-        rootDir,
-        cache.sources,
-        withPubspecOverrides: true,
-    );
+    var root = package('root', {"a":"1.0.0","b":"1.0.0"}, cache.hosted);
     var lockFile = LockFile.empty();
     try {
         var result = await resolveVersions(
@@ -36,4 +31,13 @@ void printResult(result) {
 
 void printFailure(exception) {
     print(exception);
+}
+
+Package package(name, deps, source) {
+    var pubspec = Pubspec.fromMap({
+        'name': name,
+        'dependencies': deps,
+        'environment': {'sdk': '^3.0.2'}
+    }, (name) => source);
+    return Package.inMemory(pubspec);
 }
