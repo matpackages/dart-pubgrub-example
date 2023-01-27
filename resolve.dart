@@ -6,7 +6,8 @@ import 'pub/lib/src/pubspec.dart';
 
 void main() async {
     var type = SolveType.get;
-    var cache = SystemCache(isOffline: false);
+    var cacheDir = "temp/cache";
+    var cache = SystemCache(rootDir: cacheDir, isOffline: false);
     var root = package('root', {"a":"1.0.0","b":"1.0.0"}, cache.hosted);
     var lockFile = LockFile.empty();
     try {
