@@ -5,7 +5,7 @@ import 'pub/test/test_pub.dart';
 
 void main() async {
     var project = 'temp/myapp';
-    var file = 'examples/error-branching.json';
+    var file = 'test_case.json';
     var data = readTest(file);
     await startPackageServer(project, data['root'], data['packages']);
 }
@@ -41,6 +41,9 @@ String parseConstraint(String spec) {
         return spec;
     }
     var parts = spec.split(' - ');
+    if (parts.length == 1) {
+        return spec;
+    }
     var lower = parts[0];
     var upper = parts[1];
     var up;
