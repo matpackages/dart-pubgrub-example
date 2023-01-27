@@ -3,20 +3,28 @@ import 'pub/test/test_pub.dart';
 
 void main() async {
     var project = 'temp/myapp';
-    var rootDeps = {'a': '1.0.0', 'b': '1.0.0'};
+    var root = {'a': '1.0.0', 'b': '1.0.0'};
+    Map<String, Map<String, Map<String, dynamic>>> packages = {
+        'a': {'1.0.0': {'aa': '1.0.0', 'ab': '1.0.0'}},
+        'aa': {'1.0.0': {}},
+        'ab': {'1.0.0': {}},
+        'b': {'1.0.0': {'ba': '1.0.0', 'bb': '1.0.0'}},
+        'ba': {'1.0.0': {}},
+        'bb': {'1.0.0': {}}
+    };
 
-    await startPackageServer(project, rootDeps);
+    await startPackageServer(project, root, packages);
 }
 
-void startPackageServer(project, rootDeps) async {
+void startPackageServer(project, rootDeps, packages) async {
     var server = await PackageServer.start();
-        server
-        ..serve('a', '1.0.0', deps: {'aa': '1.0.0', 'ab': '1.0.0'})
-        ..serve('aa', '1.0.0')
-        ..serve('ab', '1.0.0')
-        ..serve('b', '1.0.0', deps: {'ba': '1.0.0', 'bb': '1.0.0'})
-        ..serve('ba', '1.0.0')
-        ..serve('bb', '1.0.0');
+
+    for (var name in packages.keys) {
+        for (var version in packages[name].keys) {
+            var deps = packages[name][version];
+            server.serve(name, version, deps: deps);
+        }
+    }
     print(server.url);
 
     var yamlFile = d.appPubspec(dependencies: rootDeps);
