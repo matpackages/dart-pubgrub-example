@@ -1,12 +1,15 @@
-@Timeout(Duration(hours: 2))
-
-import 'package:test/test.dart';
 import 'pub/test/descriptor.dart' as d;
 import 'pub/test/test_pub.dart';
 
-void main() {
-    test('simple dependency tree', () async {
-        var server = await servePackages();
+void main() async {
+    var project = 'temp/myapp';
+    var rootDeps = {'a': '1.0.0', 'b': '1.0.0'};
+
+    await startPackageServer(project, rootDeps);
+}
+
+void startPackageServer(project, rootDeps) async {
+    var server = await PackageServer.start();
         server
         ..serve('a', '1.0.0', deps: {'aa': '1.0.0', 'ab': '1.0.0'})
         ..serve('aa', '1.0.0')
@@ -14,27 +17,12 @@ void main() {
         ..serve('b', '1.0.0', deps: {'ba': '1.0.0', 'bb': '1.0.0'})
         ..serve('ba', '1.0.0')
         ..serve('bb', '1.0.0');
+    print(server.url);
 
-        var deps = {'a': '1.0.0', 'b': '1.0.0'};
-        var spec = d.appDir(dependencies: deps);
-        var yamlFile = d.appPubspec(dependencies: deps);
-        await yamlFile.create('temp/myapp');
-        await spec.create();
-        print(server.url);
-        
-        /*await expectResolves(
-        result: {
-            'a': '1.0.0',
-            'aa': '1.0.0',
-            'ab': '1.0.0',
-            'b': '1.0.0',
-            'ba': '1.0.0',
-            'bb': '1.0.0'
-        },
-        );*/
+    var yamlFile = d.appPubspec(dependencies: rootDeps);
+    await yamlFile.create(project);
 
-        while (true) {
-          await Future.delayed(Duration(seconds: 1));
-        }
-    }, timeout: Timeout(Duration(hours: 1)),);
+    while (true) {
+        await Future.delayed(Duration(seconds: 1));
+    }
 }
