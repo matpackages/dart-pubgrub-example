@@ -1,17 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
 import 'pub/test/descriptor.dart' as d;
 import 'pub/test/test_pub.dart';
 
 void main() async {
     var project = 'temp/myapp';
-    var root = {'a': '1.0.0', 'b': '1.0.0'};
-    Map<String, Map<String, Map<String, dynamic>>> packages = {
-        'a': {'1.0.0': {'aa': '1.0.0', 'ab': '1.0.0'}},
-        'aa': {'1.0.0': {}},
-        'ab': {'1.0.0': {}},
-        'b': {'1.0.0': {'ba': '1.0.0', 'bb': '1.0.0'}},
-        'ba': {'1.0.0': {}},
-        'bb': {'1.0.0': {}}
-    };
+    var file = 'test_case.json';
+    var jsonString = File(file).readAsStringSync();
+    var data = jsonDecode(jsonString);
+    var root = data['root'];
+    var packages = data['packages'];
 
     await startPackageServer(project, root, packages);
 }
@@ -21,8 +19,11 @@ void startPackageServer(project, rootDeps, packages) async {
 
     for (var name in packages.keys) {
         for (var version in packages[name].keys) {
-            var deps = packages[name][version];
-            server.serve(name, version, deps: deps);
+            if (packages[name][version].isEmpty) {
+                server.serve(name, version);
+            } else {
+                server.serve(name, version, deps: packages[name][version]);
+            }
         }
     }
     print(server.url);
