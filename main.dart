@@ -8,9 +8,13 @@ import 'pub/lib/src/solver.dart';
 import 'cache.dart';
 import 'versions.dart';
 
-
 void main() async {
     await runTest('examples/simple.json');
+    await runTest('examples/no-conflicts.json');
+    await runTest('examples/avoid-conflict.json');
+    await runTest('examples/conflict-resolution.json');
+    await runTest('examples/partial-satisfier.json');
+    await runTest('examples/error-linear.json');
     await runTest('examples/error-branching.json');
 }
 
@@ -21,6 +25,7 @@ void runTest(file) async {
     await solveVersions('cache', 'root', parseConstraints(data['root']), server.url);
     await server.close();
     print('');
+    print('-' * 60);
 }
 
 dynamic readTest (file) {
@@ -59,9 +64,12 @@ void solveVersions (cacheDir, rootName, rootDeps, url) async {
     }
 }
 
-void printResult(result) {
+void printResult(SolveResult result) {
+    result.packages.sort((a, b) => a.name.compareTo(b.name));
     for (var package in result.packages) {
-        print(package.toString());
+        if (!package.isRoot) {
+            print('+ ' + package.toString());
+        }
     }
 }
 
