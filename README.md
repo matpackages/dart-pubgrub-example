@@ -4,22 +4,12 @@ Clone `pub` git repository:
 
     git clone https://github.com/dart-lang/pub.git
 
-Install packages:
+Install dependencies:
 
     dart pub get
 
-Setup temp folder:
+Run test cases:
 
-    mkdir -p temp/myapp
+    bash run_main.sh
 
-Start test case:
-
-    dart run main.dart
-
-This command will:
-* start a package server that hosts the packages of the test case
-* create the file `temp/myapp/pubspec.yaml` describing the root dependencies
-
-In a new Terminal, solve packages, use the port number (e.g. `50615`) from the previous output:
-
-    bash run_pub.sh 50615
+Debug `main.dart` using VS Code to inspect what is happening inside the PubGrub algorithm.
