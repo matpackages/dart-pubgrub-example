@@ -8,7 +8,7 @@ void main() async {
     var type = SolveType.get;
     var cacheDir = "temp/cache";
     var cache = SystemCache(rootDir: cacheDir, isOffline: false);
-    var root = package('root', {"a":"1.0.0","b":"1.0.0"}, cache.hosted);
+    var root = package('root', {"foo":">=1.0.0 <2.0.0"}, cache.hosted);
     var lockFile = LockFile.empty();
     try {
         var result = await resolveVersions(
