@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'pub/test/test_pub.dart';
-import 'resolve.dart';
+import 'pub/lib/src/package.dart';
+import 'pub/lib/src/pubspec.dart';
 import 'pub/lib/src/lock_file.dart';
 import 'pub/lib/src/solver.dart';
 import 'cache.dart';
@@ -9,7 +10,7 @@ import 'versions.dart';
 
 
 void main() async {
-    await runTest('test_case.json');
+    await runTest('examples/simple.json');
     await runTest('examples/error-branching.json');
 }
 
@@ -56,4 +57,23 @@ void solveVersions (cacheDir, rootName, rootDeps, url) async {
     } catch (e) {
         printFailure(e);
     }
+}
+
+void printResult(result) {
+    for (var package in result.packages) {
+        print(package.toString());
+    }
+}
+
+void printFailure(exception) {
+    print(exception);
+}
+
+Package package(name, deps, source) {
+    var pubspec = Pubspec.fromMap({
+        'name': name,
+        'dependencies': deps,
+        'environment': {'sdk': '^3.0.2'}
+    }, (name) => source);
+    return Package.inMemory(pubspec);
 }
