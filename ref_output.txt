@@ -1,62 +1,45 @@
-test_case.json
-
-Resolving dependencies...
+examples/simple.json
 + a 1.0.0
 + aa 1.0.0
 + ab 1.0.0
 + b 1.0.0
 + ba 1.0.0
 + bb 1.0.0
-Changed 6 dependencies!
 
----------------------------------------------
+------------------------------------------------------------
 examples/no-conflicts.json
-
-Resolving dependencies...
-+ bar 1.0.0 (2.0.0 available)
++ bar 1.0.0
 + foo 1.0.0
-Changed 2 dependencies!
 
----------------------------------------------
+------------------------------------------------------------
 examples/avoid-conflict.json
++ bar 1.1.0
++ foo 1.0.0
 
-Resolving dependencies...
-+ bar 1.1.0 (2.0.0 available)
-+ foo 1.0.0 (1.1.0 available)
-Changed 2 dependencies!
-
----------------------------------------------
+------------------------------------------------------------
 examples/conflict-resolution.json
++ foo 1.0.0
 
-Resolving dependencies...
-+ foo 1.0.0 (2.0.0 available)
-Changed 1 dependency!
-
----------------------------------------------
+------------------------------------------------------------
 examples/partial-satisfier.json
-
-Resolving dependencies...
-+ foo 1.0.0 (1.1.0 available)
++ foo 1.0.0
 + target 2.0.0
-Changed 2 dependencies!
 
----------------------------------------------
+------------------------------------------------------------
 examples/error-linear.json
-
-Resolving dependencies...
 Because every version of foo depends on bar ^2.0.0 which depends on baz ^3.0.0, every version of foo requires baz ^3.0.0.
-So, because myapp depends on both foo ^1.0.0 and baz ^1.0.0, version solving failed.
+So, because root depends on both foo ^1.0.0 and baz ^1.0.0, version solving failed.
 
----------------------------------------------
+
+------------------------------------------------------------
 examples/error-branching.json
-
-Resolving dependencies...
     Because foo <1.1.0 depends on a ^1.0.0 which depends on b ^2.0.0, foo <1.1.0 requires b ^2.0.0.
 (1) So, because foo <1.1.0 depends on b ^1.0.0, foo <1.1.0 is forbidden.
 
     Because foo >=1.1.0 depends on x ^1.0.0 which depends on y ^2.0.0, foo >=1.1.0 requires y ^2.0.0.
     And because foo >=1.1.0 depends on y ^1.0.0, foo >=1.1.0 is forbidden.
     And because foo <1.1.0 is forbidden (1), foo is forbidden.
-    So, because myapp depends on foo ^1.0.0, version solving failed.
+    So, because root depends on foo ^1.0.0, version solving failed.
 
----------------------------------------------
+
+------------------------------------------------------------
