@@ -1,6 +1,6 @@
 # dart-pubgrub-example
 
-Run simple test cases using `pub`'s version solver PubGrub.
+Minimal examples to solve dependency resolution problems using the original PubGrub implementation in Dart.
 
 ## Setup
 
