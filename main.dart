@@ -25,7 +25,6 @@ void runTest(file) async {
     await solveVersions('cache', 'root', parseConstraints(data['root']), server.url);
     await server.close();
     print('');
-    print('-' * 60);
 }
 
 dynamic readTest (file) {
@@ -68,7 +67,7 @@ void printResult(SolveResult result) {
     result.packages.sort((a, b) => a.name.compareTo(b.name));
     for (var package in result.packages) {
         if (!package.isRoot) {
-            print('+ ' + package.toString());
+            print(package.toString());
         }
     }
 }
