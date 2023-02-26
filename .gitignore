@@ -2,4 +2,3 @@
 .dart_tool/
 pub/
 cache/
-*-result.json
