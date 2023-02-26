@@ -7,24 +7,27 @@ void main() async {
     var resultFile = 'universes/elm/elm-result.json';
     var packages = readJson(packageFile);
     var server = await startPackageServer(packages);
-    var name = 'AdrianRibao_elm_derberos_date';
     var results = {};
-    results[name] = {};
-    for (var version in packages[name].keys) {
-      var root = packages[name][version];
-      print('${name}/${version}:');
-      var result = await solveVersions('cache', 'root', parseConstraints(root), server.url);
-      dynamic r;
-      if (result is SolveResult) {
-        r = {'solution': toMap(result)};
-      } else {
-        r = {'failure': toPlainString(result.message).split('\n')};
+    int nFailures = 0;
+    for (var name in packages.keys) {
+      results[name] = {};
+      for (var version in packages[name].keys) {
+        var root = packages[name][version];
+        print('${name}/${version}:');
+        var result = await solveVersions('cache', 'root', parseConstraints(root), server.url);
+        dynamic r;
+        if (result is SolveResult) {
+          r = {'solution': toMap(result)};
+        } else {
+          nFailures += 1;
+          r = {'failure': toPlainString(result.message).split('\n')};
+        }
+        results[name][version] = r;
+        print('');
       }
-      results[name][version] = r;
-      print('');
     }
-    print(results);
     writeJson(resultFile, results);
+    print('version solving failed ${nFailures} times.');
     await server.close();
 }
 

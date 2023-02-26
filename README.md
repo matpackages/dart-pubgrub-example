@@ -30,4 +30,4 @@ Solve every version of every package of the Elm universe using `universes/elm/el
 
     bash run_elm.sh
 
-This saves the output file `universes/elm/elm-result.json` containing the version solving results.
+This takes about 30 seconds and saves the output file `universes/elm/elm-result.json` containing the version solving results.
