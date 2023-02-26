@@ -20,7 +20,7 @@ void main() async {
           r = {'solution': toMap(result)};
         } else {
           nFailures += 1;
-          r = {'failure': toPlainString(result.message).split('\n')};
+          r = {'failure': correctFailureString(result.message).split('\n')};
         }
         results[name][version] = r;
         print('');
@@ -31,12 +31,16 @@ void main() async {
     await server.close();
 }
 
-String toPlainString(String s) {
+String correctFailureString(String s) {
   String sNew = s;
   if (s.endsWith('\n')) {
     sNew = s.substring(0, s.length-1);
   }
   // replace bold text to normal text
   sNew = sNew.replaceAll('\u001b[1m', '').replaceAll('\u001b[0m', '');
+  // replace syntax to Matlab syntax
+  sNew = sNew.replaceAll('root', 'root (1.0.0)');
+  sNew = sNew.replaceAllMapped(RegExp(r'\^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${m[1]}.*.*)');
+  sNew = sNew.replaceAll('>=1.0.3 <3.0.0', '(1.0.3 - 2.*.*)');  // hardcoded
   return sNew;
 }
