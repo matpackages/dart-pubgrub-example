@@ -10,16 +10,22 @@ import 'versions.dart';
 
 void runTest(file) async {
     print(file);
-    var data = readTest(file);
+    var data = readJson(file);
     var server = await startPackageServer(data['packages']);
     await solveVersions('cache', 'root', parseConstraints(data['root']), server.url);
     await server.close();
     print('');
 }
 
-dynamic readTest (file) {
+dynamic readJson (file) {
     var jsonString = File(file).readAsStringSync();
     return jsonDecode(jsonString);
+}
+
+void writeJson (file, dynamic content) {
+    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    var jsonString = encoder.convert(content);
+    File(file).writeAsStringSync(jsonString);
 }
 
 Future<PackageServer> startPackageServer(packages) async {
@@ -34,13 +40,14 @@ Future<PackageServer> startPackageServer(packages) async {
     return server;
 }
 
-void solveVersions (cacheDir, rootName, rootDeps, url) async {
+dynamic solveVersions (cacheDir, rootName, rootDeps, url) async {
     var type = SolveType.get;
     var cache = TestSystemCache(rootDir: cacheDir, url: url);
     var root = package(rootName, rootDeps, cache.hosted);
     var lockFile = LockFile.empty();
+    var result;
     try {
-        var result = await resolveVersions(
+        result = await resolveVersions(
             type,
             cache,
             root,
@@ -48,18 +55,29 @@ void solveVersions (cacheDir, rootName, rootDeps, url) async {
             unlock: [],
         );
         printResult(result);
-    } catch (e) {
+    } on SolveFailure catch (e) {
         printFailure(e);
+        result = e;
     }
+    return result;
 }
 
 void printResult(SolveResult result) {
-    result.packages.sort((a, b) => a.name.compareTo(b.name));
+    var m = toMap(result);
+    for (var item in m.entries) {
+        print('${item.key} ${item.value}');
+    }
+}
+
+Map<String, String> toMap(SolveResult result) {
+  Map<String, String> m = {};
+  result.packages.sort((a, b) => a.name.compareTo(b.name));
     for (var package in result.packages) {
         if (!package.isRoot) {
-            print(package.toString());
+            m[package.name] = package.version.toString();
         }
     }
+    return m;
 }
 
 void printFailure(exception) {
