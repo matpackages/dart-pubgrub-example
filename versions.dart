@@ -1,11 +1,20 @@
 String parseConstraint(String spec) {
     // convert spec from format '3.0.0 - 4.*.*' to '>=3.0.0 <5.0.0'
     if (spec == '*') {
-        return spec;
+        return 'any';
     }
-    var parts = spec.split(' - ');
+    if (spec.contains(',')) {
+        var parts = spec.split(', ');
+        return parseRange(parts.last);
+    } else {
+        return parseRange(spec);
+    }
+}
+
+String parseRange(String range) {
+    var parts = range.split(' - ');
     if (parts.length == 1) {
-        return spec;
+        return range;
     }
     var lower = parts[0];
     var upper = parts[1];
