@@ -28,6 +28,6 @@ The file `universes/elm/elm-packages.json` has been created by the script `conve
 
 Solve every version of every package of the Elm universe using `universes/elm/elm-packages.json` as input file:
 
-    bash run_elm.sh
+    bash run_universe.sh elm
 
 This takes about 30 seconds and saves the output file `universes/elm/elm-result.json` containing the version solving results.

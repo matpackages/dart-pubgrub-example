@@ -2,9 +2,10 @@ import 'util.dart';
 import 'versions.dart';
 import 'pub/lib/src/solver.dart';
 
-void main() async {
-    var packageFile = 'universes/elm/elm-packages.json';
-    var resultFile = 'universes/elm/elm-result.json';
+void main(List<String> args) async {
+    var universe = args[0];
+    var packageFile = 'universes/${universe}/${universe}-packages.json';
+    var resultFile = 'universes/${universe}/${universe}-result.json';
     var packages = readJson(packageFile);
     var server = await startPackageServer(packages);
     var results = {};
