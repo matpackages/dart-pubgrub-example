@@ -55,6 +55,27 @@ String nextVersion(String ver) {
     }
 }
 
+String prevVersion(String ver) {
+    if (ver.contains('*')) {
+        throw Exception('a version with * has no previous version');
+    }
+    var parts = ver.split('.');
+    var major = int.parse(parts[0]);
+    var minor = int.parse(parts[1]);
+    var patch = int.parse(parts[2]);
+    String v;
+    if (patch != 0) {
+        v = version(major, minor, patch - 1);
+    } else if (minor != 0) {
+        v = '${major}.${minor-1}.*';
+    } else if (major != 0) {
+        v = '${major-1}.*.*';
+    } else {
+        throw Exception('0.0.0 has no previous version');
+    }
+    return v;
+}
+
 String version(major, minor, patch) {
     return '${major}.${minor}.${patch}';
 }
