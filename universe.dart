@@ -48,5 +48,8 @@ String correctFailureString(String s) {
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver})'), (Match m) => '(${m[1]} - *.*.*)');
   sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
   sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
+  // sometimes upper bounds in failure message contain the string '-∞',although there are no pre-release versions
+  // --> bug in Pub? --> remove this string
+  sNew = sNew.replaceAll('-∞', '');
   return sNew;
 }
