@@ -45,5 +45,8 @@ String correctFailureString(String s) {
   sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${m[1]}.*.*)');
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(m[5])})');
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <=(${semver})'), (Match m) => '(${m[1]} - ${m[5]})');
+  sNew = sNew.replaceAllMapped(RegExp('>=(${semver})'), (Match m) => '(${m[1]} - *.*.*)');
+  sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
+  sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
   return sNew;
 }
