@@ -34,6 +34,8 @@ This takes about 30 seconds and saves the output file `universes/elm/elm-result.
 
 ## Run on Julia package universe
 
+### Preparation
+
 If you want to run PubGub on the Julia package universe, you have to modify the source code of package `pub_semver`
 first, to allow a set union of version ranges. First, find out what version of `pub_semver` is installed by running:
 
@@ -62,3 +64,11 @@ factory VersionConstraint.parse(String text) {
   var originalText = text;
   ...
 ```
+
+### Run
+
+Solve every version of every package of the Julia universe using `universes/julia/julia-packages.json` as input file (this file has been created using the script `convert.py` from [julia-package-universe](https://github.com/matlabpackages/julia-package-universe)):
+
+    bash run_universe.sh julia
+
+This takes several hours and saves the output file `universes/julia/julia-result.json` containing the version solving results.
