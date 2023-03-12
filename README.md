@@ -31,3 +31,34 @@ Solve every version of every package of the Elm universe using `universes/elm/el
     bash run_universe.sh elm
 
 This takes about 30 seconds and saves the output file `universes/elm/elm-result.json` containing the version solving results.
+
+## Run on Julia package universe
+
+If you want to run PubGub on the Julia package universe, you have to modify the source code of package `pub_semver`
+first, to allow a set union of version ranges. First, find out what version of `pub_semver` is installed by running:
+
+    dart pub deps | grep 'pub_semver '
+
+This should print something like `pub_semver 2.1.3`. Now open the file `version_constraint.dart` of this version:
+
+    code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/version_constraint.dart
+
+In this file in function `VersionConstraint.parse` (line 47), replace the beginning of the function:
+
+```dart
+factory VersionConstraint.parse(String text) {
+  var originalText = text;
+  ...
+```
+
+with 
+
+```dart
+factory VersionConstraint.parse(String text) {
+  if (text.contains(' or ')) {
+      var parts = text.split(' or ');
+      return VersionConstraint.unionOf(parts.map((p) => VersionConstraint.parse(p)));
+  }
+  var originalText = text;
+  ...
+```

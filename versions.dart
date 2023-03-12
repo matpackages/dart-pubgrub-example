@@ -5,7 +5,7 @@ String parseConstraint(String spec) {
     }
     if (spec.contains(',')) {
         var parts = spec.split(', ');
-        return parseRange(parts.last);
+        return parts.map((range) => parseRange(range)).toList().join(' or ');
     } else {
         return parseRange(spec);
     }
