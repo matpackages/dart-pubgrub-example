@@ -79,3 +79,16 @@ String prevVersion(String ver) {
 String version(major, minor, patch) {
     return '${major}.${minor}.${patch}';
 }
+
+String toMatlabString(String s) {
+  String semver = r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)';
+  var sNew = s.replaceAll('root', 'root (1.0.0)');
+  sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${m[1]}.*.*)');
+  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(m[5])})');
+  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <=(${semver})'), (Match m) => '(${m[1]} - ${m[5]})');
+  sNew = sNew.replaceAllMapped(RegExp('>=(${semver})'), (Match m) => '(${m[1]} - *.*.*)');
+  sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
+  sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
+  sNew = sNew.replaceAll('any', '(*)');
+  return sNew;
+}

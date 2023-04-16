@@ -40,15 +40,7 @@ String correctFailureString(String s) {
   // replace bold text to normal text
   sNew = sNew.replaceAll('\u001b[1m', '').replaceAll('\u001b[0m', '');
   // replace syntax to Matlab syntax
-  String semver = r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)';
-  sNew = sNew.replaceAll('root', 'root (1.0.0)');
-  sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${m[1]}.*.*)');
-  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(m[5])})');
-  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <=(${semver})'), (Match m) => '(${m[1]} - ${m[5]})');
-  sNew = sNew.replaceAllMapped(RegExp('>=(${semver})'), (Match m) => '(${m[1]} - *.*.*)');
-  sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
-  sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
-  sNew = sNew.replaceAll('any', '(*)');
+  sNew = toMatlabString(sNew);
   // sometimes upper bounds in failure message contain the string '-∞',although there are no pre-release versions
   // --> bug in Pub? --> remove this string
   sNew = sNew.replaceAll('-∞', '');
