@@ -91,6 +91,7 @@ String toMatlabString(String s) {
   sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
   sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
   sNew = sNew.replaceAll('any', '(*)');
+  sNew = sNew.replaceAll(') or (', ', ');
   return sNew;
 }
 
