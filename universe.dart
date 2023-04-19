@@ -41,8 +41,5 @@ String correctFailureString(String s) {
   sNew = sNew.replaceAll('\u001b[1m', '').replaceAll('\u001b[0m', '');
   // replace syntax to Matlab syntax
   sNew = toMatlabString(sNew);
-  // sometimes upper bounds in failure message contain the string '-∞',although there are no pre-release versions
-  // --> bug in Pub? --> remove this string
-  sNew = sNew.replaceAll('-∞', '');
   return sNew;
 }

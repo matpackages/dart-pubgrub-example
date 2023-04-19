@@ -91,8 +91,10 @@ String toMatlabString(String s) {
   sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
   sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
   sNew = sNew.replaceAll('any', '(*)');
+  sNew = sNew.replaceAll('-∞', '');
   sNew = sNew.replaceAll(') or (', ', ');
   sNew = sNew.replaceAll('root (1.0.0) is (0.0.0)', 'root is 1.0.0');
+  sNew = sNew.replaceAllMapped(RegExp('(${semver}) - (${semver})'), (Match m) => (m[1] == m[5]) ? '${m[1]}' : '${m[0]}');
   return sNew;
 }
 
