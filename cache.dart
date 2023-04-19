@@ -15,7 +15,7 @@ class TestSystemCache extends SystemCache {
     @override
     TestHostedSource get hosted => TestHostedSource(url);
 
-    TestSystemCache({ String rootDir='', String this.url }) : super(rootDir: rootDir, isOffline: false);
+    TestSystemCache({ String rootDir='', String this.url='' }) : super(rootDir: rootDir, isOffline: false);
 }
 
 class TestHostedSource implements HostedSource {
@@ -37,12 +37,12 @@ class TestHostedSource implements HostedSource {
   }
 
   @override
-  String doGetDirectory(PackageId id, SystemCache cache, {String relativeFrom}) {
+  String doGetDirectory(PackageId id, SystemCache cache, {String? relativeFrom}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<List<PackageId>> doGetVersions(PackageRef ref, Duration maxAge, SystemCache cache) {
+  Future<List<PackageId>> doGetVersions(PackageRef ref, Duration? maxAge, SystemCache cache) {
     throw UnimplementedError();
   }
 
@@ -78,13 +78,12 @@ class TestHostedSource implements HostedSource {
   String get name => throw UnimplementedError();
 
   @override
-  PackageId parseId(String name, Version version, description, {String containingDir}) {
-
+  PackageId parseId(String name, Version version, description, {String? containingDir}) {
     throw UnimplementedError();
   }
 
   @override
-  PackageRef parseRef(String name, description, {String containingDir, LanguageVersion languageVersion}) {
+  PackageRef parseRef(String name, description, {String? containingDir, required LanguageVersion languageVersion}) {
     return PackageRef(name, HostedDescription(name, url));
   }
 
@@ -94,7 +93,7 @@ class TestHostedSource implements HostedSource {
   }
 
   @override
-  PackageRef refFor(String name, {String url}) {
+  PackageRef refFor(String name, {String? url}) {
     throw UnimplementedError();
   }
 
@@ -109,7 +108,7 @@ class TestHostedSource implements HostedSource {
   }
 
   @override
-  Future<PackageStatus> status(PackageRef ref, Version version, SystemCache cache, {Duration maxAge}) {
+  Future<PackageStatus> status(PackageRef ref, Version version, SystemCache cache, {Duration? maxAge}) {
     throw UnimplementedError();
   }
 

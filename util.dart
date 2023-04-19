@@ -8,13 +8,14 @@ import 'pub/lib/src/solver.dart';
 import 'cache.dart';
 import 'versions.dart';
 
-void runTest(file) async {
+Future<int> runTest(file) async {
     print(file);
     var data = readJson(file);
     var server = await startPackageServer(data['packages']);
     await solveVersions('cache', 'root', parseConstraints(data['root']), server.url);
     await server.close();
     print('');
+    return 0;
 }
 
 dynamic readJson (file) {

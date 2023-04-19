@@ -84,11 +84,11 @@ String toMatlabString(String s) {
   String semver = r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)';
   var sNew = s.replaceAll('root', 'root (1.0.0)');
   sNew = sNew.replaceAllMapped(RegExp(' ${semver}'), (Match m) => ' (${m[1]}.${m[2]}.${m[3]})');
-  sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${caretUpperBound(m[1], m[2])})');
-  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(m[5])})');
+  sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${caretUpperBound(ensure(m[1]), ensure(m[2]))})');
+  sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(ensure(m[5]))})');
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <=(${semver})'), (Match m) => '(${m[1]} - ${m[5]})');
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver})'), (Match m) => '(${m[1]} - *.*.*)');
-  sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(m[1])})');
+  sNew = sNew.replaceAllMapped(RegExp('<(${semver})'), (Match m) => '(0.0.0 - ${prevVersion(ensure(m[1]))})');
   sNew = sNew.replaceAllMapped(RegExp('<=(${semver})'), (Match m) => '(0.0.0 - ${m[1]})');
   sNew = sNew.replaceAll('any', '(*)');
   sNew = sNew.replaceAll('-∞', '');
@@ -103,5 +103,13 @@ String caretUpperBound(String major, String minor) {
     return '$major.$minor.*';
   } else {
     return '$major.*.*';
+  }
+}
+
+String ensure(String? s) {
+  if (s == null) {
+    return '';
+  } else {
+    return s;
   }
 }
