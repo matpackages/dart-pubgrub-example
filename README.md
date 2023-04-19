@@ -9,6 +9,9 @@ First you have to install the current [Dart SDK](https://dart.dev/get-dart).
 Then, clone the `pub` git repository into the subdirectory `pub`:
 
     git clone https://github.com/dart-lang/pub.git
+    # for best reproducability also use:
+    cd pub && git checkout 14b13103acff082b9657848c449132a51ffb278f
+    cd -
 
 Install dependencies:
 
