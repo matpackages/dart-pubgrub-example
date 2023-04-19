@@ -75,3 +75,7 @@ Solve every version of every package of the Julia universe using `universes/juli
     bash run_universe.sh julia
 
 This takes about one hour and saves the output file `universes/julia/julia-result.json` containing the version solving results.
+
+## Develop
+
+see [Debugging PubGrub](debugging.md)
