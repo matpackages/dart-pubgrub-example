@@ -84,6 +84,18 @@ In the function `VersionConstraint union(VersionConstraint other)` do the follow
           (min != null && min == other.max && (includeMin || other.includeMax));
 ```
 
+In the same function do also the following changes (around line 231):
+
+```dart
+      if (max != null && equalsWithoutPreRelease(other, max!)) { // <- this was changed
+        return VersionRange(
+            min: min,
+            max: max,
+            includeMin: includeMin,
+            includeMax: true,
+            alwaysIncludeMaxPreRelease: true);
+```
+
 Open `utils.dart`:
 
     code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/utils.dart
