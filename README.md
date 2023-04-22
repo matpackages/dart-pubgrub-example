@@ -68,6 +68,39 @@ factory VersionConstraint.parse(String text) {
   ...
 ```
 
+### Fix issue with merging version constraints
+
+Open `version_range.dart`:
+
+    code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/version_range.dart
+
+In the function `VersionConstraint union(VersionConstraint other)` do the following changes (around line 247):
+
+```dart
+      var edgesTouch = (max != null &&
+              //max == other.min && // <- remove this
+              (other.min != null && equalsWithoutPreRelease(max!, other.min!)) && // <- add this
+              (includeMax || other.includeMin)) ||
+          (min != null && min == other.max && (includeMin || other.includeMax));
+```
+
+Open `utils.dart`:
+
+    code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/utils.dart
+
+Replace the function `areAdjacent` with the following one:
+
+```dart
+bool areAdjacent(VersionRange range1, VersionRange range2) {
+  // if (range1.max != range2.min) return false;
+  if (range1.max == null || range2.min == null) return false;
+  if (!equalsWithoutPreRelease(range1.max!, range2.min!)) return false;
+
+  return (range1.includeMax && !range2.includeMin) ||
+      (!range1.includeMax && range2.includeMin);
+}
+```
+
 ### Run
 
 Solve every version of every package of the Julia universe using `universes/julia/julia-packages.json` as input file (this file has been created using the script `convert.py` from [julia-package-universe](https://github.com/matlabpackages/julia-package-universe)):
