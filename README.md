@@ -70,6 +70,8 @@ factory VersionConstraint.parse(String text) {
 
 ### Fix issue with merging version constraints
 
+[Issue](https://github.com/dart-lang/pub_semver/issues/84) filed on GitHub.
+
 Open `version_range.dart`:
 
     code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/version_range.dart
