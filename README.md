@@ -98,6 +98,24 @@ In the same function do also the following changes (around line 231):
             alwaysIncludeMaxPreRelease: true);
 ```
 
+Also add the following line (twice) after checking for `Version`, and `VersionRange`, respectively:
+
+```dart
+    if (other is Version) {
+      if (allows(other)) return this;
+
+      if (isPatchGap(this, other)) return mergePatchGap(this, other);  // <- add this
+      ...
+```
+
+and
+
+```dart
+    if (other is VersionRange) {
+      if (isPatchGap(this, other)) return mergePatchGap(this, other); // <- add this
+      ...
+```
+
 Open `utils.dart`:
 
     code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/utils.dart
@@ -107,12 +125,52 @@ Replace the function `areAdjacent` with the following one:
 ```dart
 bool areAdjacent(VersionRange range1, VersionRange range2) {
   // if (range1.max != range2.min) return false;
+  if (isPatchGap(range1, range2)) return true;
   if (range1.max == null || range2.min == null) return false;
   if (!equalsWithoutPreRelease(range1.max!, range2.min!)) return false;
 
   return (range1.includeMax && !range2.includeMin) ||
       (!range1.includeMax && range2.includeMin);
 }
+```
+
+Add the following new functions at the end of the file:
+```dart
+// New functions
+bool isPatchGap(VersionRange range1, VersionRange range2) {
+  // true if no version number fits between max allowed version of range1 and min allowed version of range2
+  return range1.max != null && range2.min != null && range1.includeMax && range2.includeMin && range1.max!.nextPatch == range2.min!;
+}
+
+VersionRange mergePatchGap(VersionRange range1, VersionRange range2) {
+  return VersionRange(
+    min: range1.min,
+    max: range2.max,
+    includeMin: range1.includeMin,
+    includeMax: range2.includeMax,
+    alwaysIncludeMaxPreRelease: true);
+}
+```
+
+Open `version.dart`:
+
+    code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/version.dart
+
+and add in the funtion `union`:
+
+```dart
+  VersionConstraint union(VersionConstraint other) {
+    if (other.allows(this)) return other;
+
+    if (other is VersionRange) {
+      if (isPatchGap(this, other)) return mergePatchGap(this, other); // <- add this
+      ...
+```
+
+and at the beginning of the file, add:
+
+```dart
+import 'utils.dart';
 ```
 
 ### Run
