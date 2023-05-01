@@ -83,6 +83,8 @@ String version(major, minor, patch) {
 String toMatlabString(String s) {
   String semver = r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)';
   var sNew = s.replaceAll('root', 'root (1.0.0)');
+  sNew = sNew.replaceAll('-0', '');  // prelease fix
+  sNew = sNew.replaceAll('-∞', '');  // prelease fix
   sNew = sNew.replaceAllMapped(RegExp(' ${semver}'), (Match m) => ' (${m[1]}.${m[2]}.${m[3]})');
   sNew = sNew.replaceAllMapped(RegExp(r'\^' + '${semver}'), (Match m) => '(${m[1]}.${m[2]}.${m[3]} - ${caretUpperBound(ensure(m[1]), ensure(m[2]))})');
   sNew = sNew.replaceAllMapped(RegExp('>=(${semver}) <(${semver})'), (Match m) => '(${m[1]} - ${prevVersion(ensure(m[5]))})');
@@ -93,7 +95,6 @@ String toMatlabString(String s) {
   sNew = sNew.replaceAll('which doesn\'t match any', 'NO_MATCH_ANY');
   sNew = sNew.replaceAll(' any', ' (*)');
   sNew = sNew.replaceAll('NO_MATCH_ANY', 'which doesn\'t match any');
-  sNew = sNew.replaceAll('-∞', '');
   sNew = sNew.replaceAll(') or (', ', ');
   sNew = sNew.replaceAll('root (1.0.0) is (0.0.0)', 'root is 1.0.0');
   sNew = sNew.replaceAllMapped(RegExp('(${semver}) - (${semver})'), (Match m) => (m[1] == m[5]) ? '${m[1]}' : '${m[0]}');
