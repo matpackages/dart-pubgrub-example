@@ -82,7 +82,7 @@ String version(major, minor, patch) {
 
 String toMatlabString(String s) {
   String semver = r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)';
-  var sNew = s.replaceAll('root', 'root (1.0.0)');
+  var sNew = s.replaceAll(' root ', ' root (1.0.0) ');
   sNew = sNew.replaceAll('-0', '');  // prelease fix
   sNew = sNew.replaceAll('-∞', '');  // prelease fix
   sNew = sNew.replaceAllMapped(RegExp(' ${semver}'), (Match m) => ' (${m[1]}.${m[2]}.${m[3]})');
