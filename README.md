@@ -150,6 +150,11 @@ VersionRange mergePatchGap(VersionRange range1, VersionRange range2) {
     includeMax: range2.includeMax,
     alwaysIncludeMaxPreRelease: true);
 }
+
+bool allowsSingleVersionPreReleases(VersionRange range) {
+  return range.min != null && range.max != null && range.includeMin && 
+    !range.includeMax && equalsWithoutPreRelease(range.min!, range.max!);
+}
 ```
 
 Open `version.dart`:
@@ -171,6 +176,23 @@ and at the beginning of the file, add:
 
 ```dart
 import 'utils.dart';
+```
+
+Open `version_union.dart`:
+
+    code ~/.pub-cache/hosted/pub.dev/pub_semver-2.1.3/lib/src/version_union.dart
+
+In the function `difference` add the following line near the end of the function (around line 195):
+
+```dart
+    ...
+
+    newRanges = newRanges.where((r) => !allowsSingleVersionPreReleases(r)).toList();  // <- add this
+
+    if (newRanges.isEmpty) return VersionConstraint.empty;
+    if (newRanges.length == 1) return newRanges.single;
+    return VersionUnion.fromRanges(newRanges);
+  }
 ```
 
 ### Run
