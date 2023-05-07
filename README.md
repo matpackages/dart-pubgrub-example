@@ -92,7 +92,7 @@ In the same function do also the following changes (around line 231):
       if (max != null && equalsWithoutPreRelease(other, max!)) { // <- this was changed
         return VersionRange(
             min: min,
-            max: max,
+            max: max! >= other ? max! : other,  // <- this was changed (strip prerelease)
             includeMin: includeMin,
             includeMax: true,
             alwaysIncludeMaxPreRelease: true);
