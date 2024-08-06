@@ -27,7 +27,7 @@ Debug `main.dart` using VS Code to inspect what is happening inside the PubGrub 
 
 ## Run on Elm package universe
 
-The file `universes/elm/elm-packages.json` has been created by the script `convert_graph.py` from the file `graph.json`, which was downloaded using the script `download.py` on 2023-02-25 at 12:01 UTC. Both scripts are from [elm-package-benchmark](https://github.com/matlabpackages/elm-package-benchmark).
+The file `universes/elm/elm-packages.json` has been created by the script `convert_graph.py` from the file `graph.json`, which was downloaded using the script `download.py` on 2023-02-25 at 12:01 UTC. Both scripts are from [elm-package-benchmark](https://github.com/matpackages/elm-package-benchmark).
 
 Solve every version of every package of the Elm universe using `universes/elm/elm-packages.json` as input file:
 
@@ -49,7 +49,7 @@ Alternatively, it can also be done [manually using this guide](fix_pub_semver.md
 
 ### Run
 
-Solve every version of every package of the Julia universe using `universes/julia/julia-packages.json` as input file (this file has been created using the script `convert.py` from [julia-package-universe](https://github.com/matlabpackages/julia-package-universe)):
+Solve every version of every package of the Julia universe using `universes/julia/julia-packages.json` as input file (this file has been created using the script `convert.py` from [julia-package-universe](https://github.com/matpackages/julia-package-universe)):
 
     bash run_universe.sh julia
 
